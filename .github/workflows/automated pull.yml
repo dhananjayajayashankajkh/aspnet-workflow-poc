@@ -3,7 +3,10 @@ name: Automated Release Process
 on:
   push:
     branches:
-      - development   # Trigger on push to development
+      - development
+
+permissions:
+  contents: write
 
 jobs:
   merge:
@@ -19,21 +22,21 @@ jobs:
 
       - name: Unlock Release Branch
         run: |
-          # Here, you can run a command to remove any lock on the branch if needed
           echo "Unlocking release branch (if applicable)"
 
       - name: Merge Development into Release
         run: |
-          # Check if the release branch exists
           if git show-ref --verify --quiet refs/heads/release; then
             git checkout release
           else
             git checkout -b release
           fi
           git merge development
+
+      - name: Push Changes
+        run: |
           git push origin release
 
       - name: Lock Release Branch
         run: |
-          # Here, you would implement the logic to lock the branch again
           echo "Locking release branch (if applicable)"
