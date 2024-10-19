@@ -3,14 +3,14 @@ name: Automated Release Process
 on:
   push:
     branches:
-      - development  # Trigger on push to development
+      - development   # Trigger on push to development
 
 jobs:
   merge:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Git
         run: |
