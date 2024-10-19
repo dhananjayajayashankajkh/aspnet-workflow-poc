@@ -24,8 +24,9 @@ jobs:
         run: |
           echo "Unlocking release branch (if applicable)"
 
-      - name: Merge Development into Release
+      - name: Merge Development Changes into Release
         run: |
+          # Check if the release branch exists and check it out
           if git show-ref --verify --quiet refs/heads/release; then
             git checkout release
           else
@@ -35,10 +36,10 @@ jobs:
           # Fetch remote changes
           git fetch origin release
 
-          # Merge or rebase with the remote release branch allowing unrelated histories
+          # Merge remote release branch allowing unrelated histories
           git merge origin/release --allow-unrelated-histories
 
-          # Merge development changes
+          # Merge changes from development into release
           git merge development
 
       - name: Push Changes
@@ -48,6 +49,3 @@ jobs:
       - name: Lock Release Branch
         run: |
           echo "Locking release branch (if applicable)"
-
-
-          #test dev
