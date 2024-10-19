@@ -20,6 +20,15 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
+      - name: Install Homebrew
+        run: |
+          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+      
+      - name: Update Homebrew and upgrade hub
+        run: |
+          brew update
+          brew upgrade hub
       
       - name: Auto Pull Request
         uses: diillson/auto-pull-request@latest
