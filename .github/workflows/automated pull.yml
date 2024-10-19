@@ -26,6 +26,9 @@ jobs:
 
       - name: Merge Development Changes into Release
         run: |
+          # Fetch the latest changes from the remote
+          git fetch origin
+
           # Check if the release branch exists and check it out
           if git show-ref --verify --quiet refs/heads/release; then
             git checkout release
@@ -33,17 +36,14 @@ jobs:
             git checkout -b release
           fi
 
-          # Fetch the latest changes from the remote release branch
-          git fetch origin release
-
           # Merge the remote release branch into the local release branch
           git merge origin/release --allow-unrelated-histories || true
 
           # Attempt to merge development changes into release
-          if git merge development; then
+          if git merge origin/development; then
             echo "Merge successful!"
           else
-            echo "Merge conflict detected. Exiting."
+            echo "Merge conflict detected. Please resolve conflicts manually."
             exit 1
           fi
 
