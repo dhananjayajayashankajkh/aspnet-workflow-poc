@@ -6,8 +6,17 @@ on:
       - development
 
 jobs:
+  check-user:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check GitHub user
+        run: |
+          echo "Current GitHub user: $(git config --global user.name)"
+          echo "Current GitHub email: $(git config --global user.email)"
+
   pull-request:
     runs-on: ubuntu-latest
+    needs: check-user  # This ensures the user check runs before the pull request job
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
