@@ -35,8 +35,8 @@ jobs:
           # Fetch remote changes
           git fetch origin release
 
-          # Merge or rebase with the remote release branch
-          git merge origin/release
+          # Merge or rebase with the remote release branch allowing unrelated histories
+          git merge origin/release --allow-unrelated-histories
 
           # Merge development changes
           git merge development
