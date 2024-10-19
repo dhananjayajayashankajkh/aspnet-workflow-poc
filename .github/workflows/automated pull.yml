@@ -3,14 +3,17 @@ name: Automated Release Process
 on:
   push:
     branches:
-      - development  # Trigger on push to development
+      - development
+
+permissions:
+  contents: write
 
 jobs:
   merge:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Git
         run: |
@@ -19,16 +22,29 @@ jobs:
 
       - name: Unlock Release Branch
         run: |
-          # Here, you can run a command to remove any lock on the branch if needed
           echo "Unlocking release branch (if applicable)"
 
       - name: Merge Development into Release
         run: |
-          git checkout release
+          if git show-ref --verify --quiet refs/heads/release; then
+            git checkout release
+          else
+            git checkout -b release
+          fi
+
+          # Fetch remote changes
+          git fetch origin release
+
+          # Merge or rebase with the remote release branch allowing unrelated histories
+          git merge origin/release --allow-unrelated-histories
+
+          # Merge development changes
           git merge development
+
+      - name: Push Changes
+        run: |
           git push origin release
 
       - name: Lock Release Branch
         run: |
-          # Here, you would implement the logic to lock the branch again
           echo "Locking release branch (if applicable)"
