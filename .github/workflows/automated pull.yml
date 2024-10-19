@@ -24,7 +24,12 @@ jobs:
 
       - name: Merge Development into Release
         run: |
-          git checkout release
+          # Check if the release branch exists
+          if git show-ref --verify --quiet refs/heads/release; then
+            git checkout release
+          else
+            git checkout -b release
+          fi
           git merge development
           git push origin release
 
