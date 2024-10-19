@@ -31,6 +31,14 @@ jobs:
           else
             git checkout -b release
           fi
+
+          # Fetch remote changes
+          git fetch origin release
+
+          # Merge or rebase with the remote release branch
+          git merge origin/release
+
+          # Merge development changes
           git merge development
 
       - name: Push Changes
