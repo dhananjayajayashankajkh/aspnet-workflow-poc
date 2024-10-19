@@ -33,14 +33,19 @@ jobs:
             git checkout -b release
           fi
 
-          # Fetch remote changes
+          # Fetch the latest changes from the remote release branch
           git fetch origin release
 
-          # Merge remote release branch allowing unrelated histories
-          git merge origin/release --allow-unrelated-histories
+          # Merge the remote release branch into the local release branch
+          git merge origin/release --allow-unrelated-histories || true
 
-          # Merge changes from development into release
-          git merge development
+          # Attempt to merge development changes into release
+          if git merge development; then
+            echo "Merge successful!"
+          else
+            echo "Merge conflict detected. Exiting."
+            exit 1
+          fi
 
       - name: Push Changes
         run: |
