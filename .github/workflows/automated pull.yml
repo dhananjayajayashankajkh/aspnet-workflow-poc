@@ -1,10 +1,10 @@
 # File: .github/workflows/pull-request.yml
 
 on:
-  push:
-    branches:
-      - development
-
+  # push:
+  #   branches:
+  #     - development
+  workflow_dispatch:
 jobs:
   check-user:
     runs-on: ubuntu-latest
