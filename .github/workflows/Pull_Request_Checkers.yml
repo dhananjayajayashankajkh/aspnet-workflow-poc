@@ -1,13 +1,8 @@
 name: On Pull Request Opened
 
-# on:
-# #   pull_request:
-# #     branches: [ development ]
-#     worklow_dispatch:
-
 on:
-    # workflow_call:
-    workflow_dispatch:
+  pull_request:
+    branches: [ development ]
 
 jobs:
   lint:
