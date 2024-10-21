@@ -15,6 +15,15 @@ jobs:
           java-version: 17
           distribution: 'zulu'  # Alternative distribution options are available.
 
+      - name: Add Secrets
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUBPAT }}
+            SONAR_TOKEN: ${{ secrets.SONAR_KEY }}
+        run: |
+            echo "Using GitHub PAT: $GITHUB_PAT"
+            echo "Using Sonar Key: $SONAR_KEY"
+            # Commands that utilize the secrets can go here
+
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Shallow clones should be disabled for better relevancy of analysis.
@@ -41,21 +50,12 @@ jobs:
           New-Item -Path .\.sonar\scanner -ItemType Directory -Force
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
 
-      - name: Add Secrets
-        env:
-          GITHUB_PAT: ${{ secrets.GITHUBPAT }}
-          SONAR_KEY: ${{ secrets.SONAR_KEY }}
-        run: |
-          echo "Using GitHub PAT: $GITHUB_PAT"
-          echo "Using Sonar Key: $SONAR_KEY"
-          # Commands that utilize the secrets can go here
-
       - name: Build and Analyze
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUBPAT }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_KEY }}
+        # env:
+        #   GITHUB_TOKEN: ${{ secrets.GITHUBPAT }}  # Needed to get PR information, if any
+        #   SONAR_TOKEN: ${{ secrets.SONAR_KEY }}
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"dhananjayajayashankajkh_poc-net-application" /o:"dhananjayajayashankajkh" /d:sonar.token="${{ secrets.SONAR_KEY }}" /d:sonar.host.url="https://sonarcloud.io"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"dhananjayajayashankajkh_poc-net-application" /o:"dhananjayajayashankajkh" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
           dotnet build
-          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_KEY }}"
+          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
