@@ -21,11 +21,11 @@ jobs:
           echo "Creating environment..."
           # Your environment setup commands here
 
-      - name: Add secrets
-        env:
-          GITHUB_PAT: ${{ secrets.GITHUBPAT }}
-          SONAR_KEY: ${{ secrets.SONAR_KEY }}
-        run: |
-          echo "Using GitHub PAT: $GITHUB_PAT"
-          echo "Using Sonar Key: $SONAR_KEY"
-          # Your commands that utilize the secrets here
+    #   - name: Add secrets
+    #     env:
+    #       GITHUB_PAT: ${{ secrets.GITHUBPAT }}
+    #       SONAR_KEY: ${{ secrets.SONAR_KEY }}
+    #     run: |
+    #       echo "Using GitHub PAT: $GITHUB_PAT"
+    #       echo "Using Sonar Key: $SONAR_KEY"
+    #       # Your commands that utilize the secrets here
