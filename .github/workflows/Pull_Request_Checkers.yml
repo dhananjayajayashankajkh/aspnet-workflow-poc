@@ -10,22 +10,5 @@ jobs:
     uses: ./.github/workflows/SonaCloud Build.yml
 
   test:
-    name: Test Debug Variant
+    name: .net Check Build Validation
     uses: ./.github/workflows/.net Build Checker.yml
-
-  create-env:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Set up environment
-        run: |
-          echo "Creating environment..."
-          # Your environment setup commands here
-
-    #   - name: Add secrets
-    #     env:
-    #       GITHUB_PAT: ${{ secrets.GITHUBPAT }}
-    #       SONAR_KEY: ${{ secrets.SONAR_KEY }}
-    #     run: |
-    #       echo "Using GitHub PAT: $GITHUB_PAT"
-    #       echo "Using Sonar Key: $SONAR_KEY"
-    #       # Your commands that utilize the secrets here
