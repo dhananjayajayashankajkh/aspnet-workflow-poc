@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("aspnet-workflow-poc")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5e2e7ae40738a2f744ee170c943fe06488594e38")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+da2750068a0e38ce714d7372d41faa27aba9ff86")]
 [assembly: System.Reflection.AssemblyProductAttribute("aspnet-workflow-poc")]
 [assembly: System.Reflection.AssemblyTitleAttribute("aspnet-workflow-poc")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
