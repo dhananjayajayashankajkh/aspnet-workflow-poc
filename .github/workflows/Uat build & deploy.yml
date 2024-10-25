@@ -9,10 +9,10 @@ env:
 on:
   workflow_dispatch:  # Enables manual dispatching of the workflow
   workflow_call:
-    secrets:
-      JMSLGITHUBWEBAPP_PUBLISH_PROFILE:
-        description: 'Needed for login'
-        required: true
+    # secrets:
+    #   JMSLGITHUBWEBAPP_PUBLISH_PROFILE:
+    #     description: 'Needed for login'
+    #     required: true
 
 jobs:
   build:
