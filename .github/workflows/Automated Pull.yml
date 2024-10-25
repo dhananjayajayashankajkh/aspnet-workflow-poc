@@ -121,3 +121,10 @@ jobs:
           token: ${{ secrets.GITHUBPAT }}
           pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
           merge-method: squash
+
+  prod_release:
+      name: Prod Build and Deploy
+      needs: Pull_Release_to_Master
+      uses: ./.github/workflows/production build & deploy.yml
+      secrets:
+        JMSLGITHUBWEBAPP_PUBLISH_PROFILE: ${{ secrets.JMSLGITHUBWEBAPP_PUBLISH_PROFILE }}
