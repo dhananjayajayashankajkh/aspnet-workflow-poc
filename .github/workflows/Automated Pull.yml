@@ -58,6 +58,8 @@ jobs:
     name: Uat Build and Deploy
     needs: Pull_DEV_to_Release
     uses: ./.github/workflows/Uat build & deploy.yml
+    secrets:
+      JMSLGITHUBWEBAPP_PUBLISH_PROFILE: ${{ secrets.JMSLGITHUBWEBAPP_PUBLISH_PROFILE }}
 
   Pull_Release_to_Master:
     runs-on: ubuntu-latest
