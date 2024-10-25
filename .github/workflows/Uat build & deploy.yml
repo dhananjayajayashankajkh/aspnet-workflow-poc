@@ -7,10 +7,11 @@ env:
   DOTNET_VERSION: '8.0.x'                    # set this to the .NET Core version to use
 
 on:
-  push:
-    branches:
-      - release
+  # push:
+  #   branches:
+  #     - release
   workflow_dispatch:
+  workflow_call:
 
 jobs:
   build:
