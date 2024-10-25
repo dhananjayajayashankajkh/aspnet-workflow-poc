@@ -54,6 +54,16 @@ jobs:
           pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
           merge-method: squash
 
+  Sonar_Check:
+    name: UAT Sona Check
+    needs: Pull_DEV_to_Release
+    uses: ./.github/workflows/SonaCloud Build.yml
+
+  Build_check:
+    name: .net Build Validation
+    needs: Pull_DEV_to_Release
+    uses: ./.github/workflows/.net Build Checker.yml
+
   uat_release:
     name: Uat Build and Deploy
     needs: Pull_DEV_to_Release
@@ -63,7 +73,7 @@ jobs:
 
   Pull_Release_to_Master:
     runs-on: ubuntu-latest
-    needs: Pull_DEV_to_Release
+    needs: uat_release
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
