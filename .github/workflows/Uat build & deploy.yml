@@ -1,20 +1,17 @@
 name: UAT Build & Deploy
 
 env:
-  AZURE_WEBAPP_NAME: jmslgithubwebapp    # set this to the name of your Azure Web App
-  AZURE_WEBAPP_PACKAGE_PATH: '.'             # set this to the path to your web app project, defaults to the repository root
+  AZURE_WEBAPP_NAME: jmslgithubwebapp    # Name of the Azure Web App
+  AZURE_WEBAPP_PACKAGE_PATH: './publish_output'  # Path to the published app
   ROOT_PATH: './'     
-  DOTNET_VERSION: '8.0.x'                    # set this to the .NET Core version to use
+  DOTNET_VERSION: '8.0.x'  # .NET Core version to use
 
 on:
-  # push:
-  #   branches:
-  #     - release
-  workflow_dispatch:
+  workflow_dispatch:  # Enables manual dispatching of the workflow
   workflow_call:
     secrets:
       JMSLGITHUBWEBAPP_PUBLISH_PROFILE:
-        description: 'needed for login'
+        description: 'Needed for login'
         required: true
 
 jobs:
@@ -27,7 +24,7 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
-      
+
       - name: Set up dependency caching for faster builds
         uses: actions/cache@v2
         with:
@@ -38,19 +35,18 @@ jobs:
 
       - name: Build with dotnet
         run: dotnet build --configuration Release
-        working-directory: ${{env.ROOT_PATH}}
+        working-directory: ${{ env.ROOT_PATH }}
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
-        working-directory: ${{env.ROOT_PATH}}
+        run: dotnet publish -c Release -o ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+        working-directory: ${{ env.ROOT_PATH }}
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
         
-
   deploy_dev:
     name: UAT
     runs-on: ubuntu-latest
@@ -64,7 +60,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: .net-app
-          path: ${{ env.DOTNET_ROOT }}
+          path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
           
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -73,4 +69,3 @@ jobs:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.JMSLGITHUBWEBAPP_PUBLISH_PROFILE }}
           package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}    
-  
