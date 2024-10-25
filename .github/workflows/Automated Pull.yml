@@ -54,6 +54,11 @@ jobs:
           pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
           merge-method: squash
 
+  uat_release:
+    name: Uat Build and Deploy
+    needs: Pull_DEV_to_Release
+    uses: ./.github/workflows/Uat build & deploy.yml
+
   Pull_Release_to_Master:
     runs-on: ubuntu-latest
     needs: Pull_DEV_to_Release
