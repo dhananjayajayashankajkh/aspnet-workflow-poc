@@ -1,10 +1,10 @@
 name: Production Build & Deploy
 
 env:
-  AZURE_WEBAPP_NAME: jmslgithubwebapp    # set this to the name of your Azure Web App
-  AZURE_WEBAPP_PACKAGE_PATH: './publish_output_prod'  # set this to the path to your web app project, defaults to the repository root
+  AZURE_WEBAPP_NAME: jmslgithubwebapp    # Azure Web App name
+  AZURE_WEBAPP_PACKAGE_PATH: './publish_output_prod'  # Path for the published app
   ROOT_PATH: './'     
-  DOTNET_VERSION: '8.0.x'                    # set this to the .NET Core version to use
+  DOTNET_VERSION: '8.0.x'  # .NET Core version to use
 
 on:
   workflow_dispatch:  # Enables manual dispatching of the workflow
@@ -35,19 +35,18 @@ jobs:
 
       - name: Build with dotnet
         run: dotnet build --configuration Release
-        working-directory: ${{env.ROOT_PATH}}
+        working-directory: ${{ env.ROOT_PATH }}
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp_prod
-        working-directory: ${{env.ROOT_PATH}}
+        run: dotnet publish -c Release -o ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+        working-directory: ${{ env.ROOT_PATH }}
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp_prod
+          name: .net-app-prod-${{ github.run_id }}  # Unique artifact name using run ID
+          path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
         
-
   deploy_dev:
     name: Production
     runs-on: ubuntu-latest
@@ -60,14 +59,13 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: .net-app
-          path: ${{ env.DOTNET_ROOT }}
-          
+          name: .net-app-prod-${{ github.run_id }}  # Matches the unique artifact name
+          path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.JMSLGITHUBWEBAPP_PUBLISH_PROFILE }}
-          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}    
-  
+          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
