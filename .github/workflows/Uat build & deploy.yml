@@ -2,7 +2,7 @@ name: UAT Build & Deploy
 
 env:
   AZURE_WEBAPP_NAME: jmslgithubwebapp    # Name of the Azure Web App
-  AZURE_WEBAPP_PACKAGE_PATH: './publish_output'  # Path to the published app
+  AZURE_WEBAPP_PACKAGE_PATH: './publish_output_uat'  # Path to the published app
   ROOT_PATH: './'     
   DOTNET_VERSION: '8.0.x'  # .NET Core version to use
 
@@ -42,7 +42,7 @@ jobs:
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
-          name: .net-app
+          name: .net-app-uat-${{ github.run_id }}  # Unique artifact name using run ID
           path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
         
   deploy_dev:
@@ -57,7 +57,7 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: .net-app
+          name: .net-app-uat-${{ github.run_id }}  # Unique artifact name using run ID
           path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
           
       - name: Deploy to Azure Web App
