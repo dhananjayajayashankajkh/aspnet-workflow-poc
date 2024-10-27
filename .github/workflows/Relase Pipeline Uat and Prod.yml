@@ -31,8 +31,8 @@ jobs:
           committer: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
           author: ${{ github.actor }} <${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com>
           signoff: false
-          base: release  # Target branch for PR
-          branch: development  # New branch created for PR
+          base: development  # Target branch for PR
+          branch:  release  # New branch created for PR
           delete-branch: false
           title: '[Example] Update report'
           body: |
