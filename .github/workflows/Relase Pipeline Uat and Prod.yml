@@ -1,4 +1,4 @@
-name: test pull
+name: Deployement Pipeline UAT & PROD
 
 on:
   workflow_dispatch:
@@ -54,9 +54,26 @@ jobs:
           pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
           merge-method: squash
 
+  Sonar_Check:
+    name: UAT Sona Check
+    needs: Pull_DEV_to_Release
+    uses: ./.github/workflows/SonaCloud Build.yml
+
+  Build_check:
+    name: .net Build Validation
+    needs: Pull_DEV_to_Release
+    uses: ./.github/workflows/.net Build Checker.yml
+
+  uat_release:
+    name: Uat Deployment
+    needs: Pull_DEV_to_Release
+    uses: ./.github/workflows/Uat build & deploy.yml
+    secrets:
+      JMSLGITHUBWEBAPP_PUBLISH_PROFILE: ${{ secrets.JMSLGITHUBWEBAPP_PUBLISH_PROFILE }}
+
   Pull_Release_to_Master:
     runs-on: ubuntu-latest
-    needs: Pull_DEV_to_Release
+    needs: uat_release
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -104,3 +121,10 @@ jobs:
           token: ${{ secrets.GITHUBPAT }}
           pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
           merge-method: squash
+
+  prod_release:
+      name: Production Deployment
+      needs: Pull_Release_to_Master
+      uses: ./.github/workflows/production build & deploy.yml
+      secrets:
+        JMSLGITHUBWEBAPP_PUBLISH_PROFILE: ${{ secrets.JMSLGITHUBWEBAPP_PUBLISH_PROFILE }}
