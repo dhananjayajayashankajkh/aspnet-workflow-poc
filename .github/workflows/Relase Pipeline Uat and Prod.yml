@@ -32,7 +32,7 @@ jobs:
           author: ${{ github.actor }} <${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com>
           signoff: false
           base: development  # Target branch for PR
-          branch: release  # New branch created for PR
+          branch:  release  # New branch created for PR
           delete-branch: false
           title: '[Example] Update report'
           body: |
